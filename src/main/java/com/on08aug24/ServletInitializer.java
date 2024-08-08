@@ -1,4 +1,4 @@
-package com.on08aug24.auth_google_login_spring_boot;
+package com.on08aug24;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
