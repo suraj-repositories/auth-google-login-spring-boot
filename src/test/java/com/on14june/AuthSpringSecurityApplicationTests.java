@@ -1,10 +1,10 @@
-package com.on08aug24.auth_google_login_spring_boot;
+package com.on14june;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class AuthGoogleLoginSpringBootApplicationTests {
+class AuthSpringSecurityApplicationTests {
 
 	@Test
 	void contextLoads() {

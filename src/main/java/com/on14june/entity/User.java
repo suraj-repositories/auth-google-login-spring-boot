@@ -1,45 +1,42 @@
-package com.on08aug24.entity;
+package com.on14june.entity;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
-import org.springframework.format.annotation.DateTimeFormat;
+import org.hibernate.annotations.UuidGenerator;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-@ToString
+@JsonInclude(value = Include.NON_DEFAULT)
 @Table(name = "users")
 public class User {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
+	@UuidGenerator
+	private String id;
 	private String name;
-	
 	private String email;
+	private LocalDate dob;	
 	
 	private String password;
-	
-	private String avatar;
-	
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
-	private Date dob;
+	@Transient
+	private String confirmPassword;
 	
 	private String role;
 }
