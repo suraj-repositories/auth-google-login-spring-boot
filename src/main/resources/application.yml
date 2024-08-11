@@ -1,0 +1,16 @@
+appUrl : http://localhost:8080/
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: -----------------------------------YOUR_CLIENT_ID
+            client-secret: --------------------------------YOUR_CLIENT_SECRET
+            redirect-uri: "${appUrl}/login/oauth2/code/google"
+            scope:
+              - openid
+              - profile
+              - email
+            client-name: Google

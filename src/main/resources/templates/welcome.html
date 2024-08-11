@@ -24,6 +24,8 @@
 			
 			<form th:action="@{/logout}" method="post"><button>Log out</button></form>
 			
+			<br/>
+			<img th:if="${user.picture}" th:src="${user.picture}" />
 	</div>
 
 </body>

@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -39,6 +40,10 @@ public class AuthConfig {
 								.passwordParameter("password")
 								.defaultSuccessUrl("/")
 								.permitAll())
+					.oauth2Login(form -> form
+							.loginPage("/login")
+							.defaultSuccessUrl("/login/google")
+							.failureHandler(new SimpleUrlAuthenticationFailureHandler()))
 					.logout(logout -> logout
 							.logoutSuccessUrl("/login?logout")
 							.permitAll()
@@ -47,7 +52,7 @@ public class AuthConfig {
 		return httpSecurity.build();
 
 	}
-
+    
     @Bean
     static PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
