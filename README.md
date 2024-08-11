@@ -47,7 +47,7 @@ Login with google basic implementation using spring boot
     - now go to the credentials on sidebar -> click on create credentials -> Oauth-client-id -> select the application type -> in our case the application type in web application
         - now it need some information
         - first is app name 
-        - Authorized javascript origins : here you need to fill the url address or your website in my case it is http://localhost:8000
+        - Authorized javascript origins : here you need to fill the url address or your website in my case it is http://localhost:8080
         - Authorized redirect URIs: here you need to fill the url where you want to send your user when login is successful in my case this is : http://localhost:8080/login/oauth2/code/google
         - click on create 
     - It will create client id and client secret for you -> You need to paste the client id and client-secret into your application.yml file (you need to create application.yml file as the same path on application.properties like : `/auth-spring-security-3/src/main/resources/application.yml`)
