@@ -1,7 +1,7 @@
 # auth-google-login-spring-boot
-Login with google implementation using spring boot
+Login with google basic implementation using spring boot
 
-under development...
+
 
 ## Steps - 
 
@@ -10,20 +10,20 @@ under development...
 - Step 2 : Add dependency for oauth2client and spring security on your project 
 
 ```xml
-		 <dependency>
-	      <groupId>org.springframework.boot</groupId>
-	      <artifactId>spring-boot-starter-oauth2-client</artifactId>
-	     </dependency>
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-oauth2-client</artifactId>
+</dependency>
 	     
-	     <dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency>
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-security</artifactId>
+</dependency>
 		
-		<dependency>
-			<groupId>org.thymeleaf.extras</groupId>
-			<artifactId>thymeleaf-extras-springsecurity6</artifactId>
-		</dependency>
+<dependency>
+	<groupId>org.thymeleaf.extras</groupId>
+	<artifactId>thymeleaf-extras-springsecurity6</artifactId>
+</dependency>
 
 ```
 
@@ -154,57 +154,75 @@ public class AuthConfig {
 
 ```java
 @GetMapping("/")
-	public String home(Model model, Authentication authentication, HttpServletRequest request, HttpServletResponse response){
-		if (authentication != null) {
-			User user = service.getUserByEmail(authentication.getName());
-			if (user == null) {
-				Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-				if (auth != null) {
-					new SecurityContextLogoutHandler().logout(request, response, auth);
-				}
+public String home(Model model, Authentication authentication, HttpServletRequest request, HttpServletResponse response){
+	if (authentication != null) {
+		User user = service.getUserByEmail(authentication.getName());
+		if (user == null) {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			if (auth != null) {
+				new SecurityContextLogoutHandler().logout(request, response, auth);
 			}
-			model.addAttribute("user", user);
 		}
-		return "welcome";
+		model.addAttribute("user", user);
 	}
+	return "welcome";
+}
 ```
 
 ```java
-	@GetMapping("/login/google")
-	public String loginWithGoogle(OAuth2AuthenticationToken authentication) {
-		try {
-			Map<String, Object> attributes = authentication.getPrincipal().getAttributes();
+@GetMapping("/login/google")
+public String loginWithGoogle(OAuth2AuthenticationToken authentication) {
+	try {
+		Map<String, Object> attributes = authentication.getPrincipal().getAttributes();
 
-			String email = (String) attributes.get("email");
-			String name = (String) attributes.get("name");
-			String picture = (String) attributes.get("picture");
+		String email = (String) attributes.get("email");
+		String name = (String) attributes.get("name");
+		String picture = (String) attributes.get("picture");
 
-			LOGGER.info("{} - {} - {}", email, name, picture);
-			User user;
+		LOGGER.info("{} - {} - {}", email, name, picture);
+		User user;
 
-			user = service.getUserByEmail(email);
+		user = service.getUserByEmail(email);
 
-			if (user == null) {
-				String unique = UUID.randomUUID().toString();
+		if (user == null) {
+			String unique = UUID.randomUUID().toString();
 
-				LOGGER.info("{}", unique);
-				User loginUser = User.builder().name(name).email(email).picture(picture).password(unique)
-						.confirmPassword(unique).dob(null).role("USER").id(null).build();
+			LOGGER.info("{}", unique);
+			User loginUser = User.builder().name(name).email(email).picture(picture).password(unique)
+					.confirmPassword(unique).dob(null).role("USER").id(null).build();
 
-				user = service.saveUser(loginUser);
-			}
-
-			Authentication auth = new UsernamePasswordAuthenticationToken(email, null,
-					Collections.singleton(new SimpleGrantedAuthority("ROLE_" + user.getRole())));
-
-			SecurityContextHolder.getContext().setAuthentication(auth);
-
-		} catch (Exception e) {
-			LOGGER.error("Error while login with Google: " + e.getMessage());
-			return "redirect:/error";
+			user = service.saveUser(loginUser);
 		}
-		return "redirect:/";
+
+		Authentication auth = new UsernamePasswordAuthenticationToken(email, null,
+				Collections.singleton(new SimpleGrantedAuthority("ROLE_" + user.getRole())));
+
+		SecurityContextHolder.getContext().setAuthentication(auth);
+
+	} catch (Exception e) {
+		LOGGER.error("Error while login with Google: " + e.getMessage());
+		return "redirect:/error";
 	}
-
-
+	return "redirect:/";
+}
 ```
+
+### File where i made changes 
+
+- all files in src\main\java\com\on14june
+- all files in src\main\resources\com\on14june
+- src\main\resources\application.properties
+- src\main\resources\application.yml
+- pom.xml
+
+### Need to make sure
+
+- make sure to fit all the config details carefully like client-id, client-secret, redirect-url, app-url in `src\main\resources\application.yml` file
+- never forget to create database with the given name if you are using this example
+
+
+<br />
+<br />
+<p align="center">⭐️ Star my repositories if you find it helpful.</p>
+<br />
+
